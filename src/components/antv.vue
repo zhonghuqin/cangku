@@ -7,6 +7,7 @@
         <component
           class="item"
           :style="{ width: item.width+'px', height: item.height+'px' }"
+          @dblclick="dblclick"
           @mousedown="startDrag($event, item.shape)"
           :is="item.component">
         </component>
@@ -43,6 +44,8 @@ let dnd: Dnd | null = null
 onMounted(() => {
   renderVueX6()
 })
+
+const dblclick = () => {}
 
 const renderVueX6 = () => {
   graph = new Graph({
@@ -173,6 +176,28 @@ const renderVueX6 = () => {
     target: graph,
   })
 
+  const textBlock = new Shape.TextBlock({
+    x: 300,      // Number，必选，节点位置的 x 值
+    y: 40,      // Number，必选，节点位置的 y 值
+    width: 360,   // Number，可选，节点大小的 width 值
+    height: 120,  // Number，可选，节点大小的 height 值
+    text: `可修改文本`,
+    attrs: {
+      label:{
+        contenteditable: "true",// 编辑开启
+      },
+      body: {
+        fill: '#efdbff',
+        stroke: '#9254de',
+        rx: 4,
+        ry: 4,
+      },
+    },
+    ports: ports
+  });
+ 
+  graph.addNode(textBlock);
+
   graph.on("edge:mouseenter", ({ e, edge, view }) => {
     edge.addTools(EDGE_TOOLS)
   });
@@ -194,12 +219,12 @@ const save = () => {
   graph?.getNodes().forEach(node => {
     node.removePorts(ports.items)
   });
-  // (graph as any).exportPNG('text', {
-  //   preserveDimensions: true,
-  //   backgroundColor: '#fff',
-  //   padding: 40,
-  //   quality: 1
-  // })
+  (graph as any).exportPNG('text', {
+    preserveDimensions: true,
+    backgroundColor: '#fff',
+    padding: 40,
+    quality: 1
+  })
 }
 
 const edit = () => {

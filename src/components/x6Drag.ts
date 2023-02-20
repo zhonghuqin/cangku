@@ -125,10 +125,6 @@ export const NODE_TOOLS = [
   },
 ]
 
-interface Nodes {
-  [key: string]: any
-}
-
 export const NODE_LIST = [
   {
     width: 100,
