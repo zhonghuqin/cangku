@@ -1,8 +1,8 @@
 <template>
   <div
     style="
-      width: 100%;
-      height: 100%;
+      width: 150px;
+      height: 100px;
       border: 2px solid rgba(0,0,0,0.3);
       background: #fff;
       padding: 10px;
@@ -11,20 +11,32 @@
       text-align: center;
       font-size: 16px;
     "
-  >
-    自定义节点
+    >
+    90 * 3 =
   </div>
+
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { defineComponent, getCurrentInstance, reactive } from "vue";
 
-export default defineComponent({
-  name: "ProgressNode",
-  inject: ["getNode"],
-  mounted() {
-    const node = (this as any).getNode?.();
-  }
-});
+const { getNode } = getCurrentInstance()!.appContext.provides;
+
+const mounted = () => {
+  const node = getNode?.();
+};
+// const LIST = reactive([
+//   {
+//     name:"蜡笔小新"
+//   },
+//   {
+//     name:"大头儿子"
+//   },
+//   {
+//     name:"小头爸爸"
+//   }
+// ])
+
 </script>
+
 

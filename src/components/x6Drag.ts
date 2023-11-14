@@ -1,5 +1,6 @@
 import Drag1 from './drag-components/drag1.vue'
-
+import Drag2 from './drag-components/drag2.vue'
+import Drag3 from './drag-components/drag3.vue'
 export const ports = {
   groups: {
     top: {
@@ -127,16 +128,53 @@ export const NODE_TOOLS = [
 
 export const NODE_LIST = [
   {
-    width: 100,
+    width: 150,
     height: 100,
     shape: "Drag1",
     component: Drag1,
   },
 
   {
-    width: 200,
-    height: 200,
-    shape: "Drag2",
+    width: 100,
+    height: 100,
+    shape: "Drag1",
     component: Drag1,
-  }
+  },
+  {
+    width: 100,
+    height: 100,
+    shape: "Drag2",
+    component: Drag2,
+  },
+  {
+    width: 100,
+    height: 100,
+    shape: "Drag3",
+    component: Drag3,
+  },
+  {
+    width: 160,
+    height: 100,
+    shape: "Drag3",
+    component: Drag3,
+  },
+  {
+    width: 90,
+    height: 70,
+    shape: "Drag3",
+    component: Drag3,
+  },
+  {
+    width: 90,
+    height: 70,
+    shape: "Drag3",
+    component: Drag3,
+  },
+  {
+    width: 70,
+    height: 50,
+    shape: "Drag3",
+    component: Drag3,
+  },
+
 ]

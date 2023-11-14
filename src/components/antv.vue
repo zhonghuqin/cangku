@@ -1,7 +1,7 @@
 <template>
   <div class="antv">
     <div class="save" @click="save">保存</div>
-    <div class="edit" @click="edit">编辑</div>
+    <div class="edit" @click="Undo">撤销</div>
     <div class="left">
       <template v-for="(item, index) in NODE_LIST" :key="index">
         <component
@@ -46,7 +46,7 @@ onMounted(() => {
 })
 
 const dblclick = () => {}
-
+let previousPortsState: any[] = [];
 const renderVueX6 = () => {
   graph = new Graph({
     container: document.getElementById("container") as HTMLElement,
@@ -54,7 +54,7 @@ const renderVueX6 = () => {
     snapline: true, // 对齐线
     history: true, // 启动历史记录
     background: {
-      color: '#ffffff'
+      color: '#fffbe6'
     },
     // 网格
     grid: {
@@ -98,10 +98,13 @@ const renderVueX6 = () => {
       highlight: true,
       createEdge () {
         return new Shape.Edge({
+          connector: {
+            name: 'rounded',
+          },
           attrs: {
             line: {
-              stroke: '#1890ff',
-              strokeWidth: 1,
+              stroke: '#0c6b3b',
+              strokeWidth: 3,
               targetMarker: {
                 name: 'classic',
                 size: 8
@@ -179,9 +182,10 @@ const renderVueX6 = () => {
   const textBlock = new Shape.TextBlock({
     x: 300,      // Number，必选，节点位置的 x 值
     y: 40,      // Number，必选，节点位置的 y 值
-    width: 360,   // Number，可选，节点大小的 width 值
+    width: 300,   // Number，可选，节点大小的 width 值
     height: 120,  // Number，可选，节点大小的 height 值
-    text: `可修改文本`,
+    shape:'circle',
+    text: `我是一个`,
     attrs: {
       label:{
         contenteditable: "true",// 编辑开启
@@ -195,9 +199,49 @@ const renderVueX6 = () => {
     },
     ports: ports
   });
- 
-  graph.addNode(textBlock);
+  const circle = new Shape.TextBlock({
+    id: 'node2',
+    x: 280,
+    y: 200,
+    width: 100,
+    height: 100,
+    zIndex: 2,
+    text: `大聪明`,
+    attrs: {
+      label:{
+        contenteditable: "true",// 编辑开启
+      },
+      body: {
+        fill: '#efdbff',
+        stroke: '#9254de',
+        rx: 4,
+        ry: 4,
+      },
+    },
+    ports: ports
+  })
 
+  const circles = new Shape.Circle({
+    id: 'node3',
+    x: 380,
+    y: 400,
+    width: 60,
+    height: 60,
+    label: 'circle',
+    attrs: {
+      body: {
+        fill: '#efdbff',
+        stroke: '#9254de',
+        rx: 4,
+        ry: 4,
+      },
+    },
+    zIndex: 2,
+    ports: ports
+  })
+  graph.addNode(textBlock);
+  graph.addNode(circle);
+  graph.addNode(circles);
   graph.on("edge:mouseenter", ({ e, edge, view }) => {
     edge.addTools(EDGE_TOOLS)
   });
@@ -213,6 +257,7 @@ const renderVueX6 = () => {
   graph.on('node:mouseleave', ({ cell }) => {
     cell.removeTools()
   })
+  previousPortsState = graph.getNodes().map(node => node.getPorts());
 }
 
 const save = () => {
@@ -227,9 +272,15 @@ const save = () => {
   })
 }
 
-const edit = () => {
-  graph?.getNodes().forEach(node => {
-    node.addPorts(ports.items)
+const Undo = () => {
+  graph?.getNodes().forEach((node,index) => {
+    const previousPorts = previousPortsState[index];
+    if (previousPorts) {
+      if (previousPorts) {
+        node.removePorts(); // 清空当前的端口
+        node.addPorts(previousPorts); // 添加之前保存的端口
+      }
+    }
   });
 }
 
